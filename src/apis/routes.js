@@ -6,7 +6,8 @@ const usersRouter = require("./users/routes");
 
 const router = Router();
 
-router.use("/auth", auth, usersRouter);
-router.use("/listas", listasRouter);
+router.use("/auth", usersRouter);
+router.use("/listas", auth, listasRouter);
 
 module.exports = router;
+ 
