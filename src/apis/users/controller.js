@@ -54,7 +54,27 @@ const register = async (req, res, next) => {
   }
 };
 
+const verificarVoto = async (req, res) => {
+  const { userId } = req.params;
+
+  await UserModel.findById(userId)
+    .then((user) => {
+      return res.send({
+        type: "success",
+        habilitado: !user?.votoRegistrado,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.send({
+        type: "error",
+        message: "No se encontró el usuario con id " + userId,
+      });
+    });
+};
+
 module.exports = {
   login,
   register,
+  verificarVoto,
 };
