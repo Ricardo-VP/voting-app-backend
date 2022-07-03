@@ -12,6 +12,7 @@ const userSchema = moongose.Schema(
       requireq: true,
     },
     esAdmin: Boolean,
+    votoRegistrado: Boolean,
   },
   {
     timestamps: true,

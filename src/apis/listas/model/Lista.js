@@ -11,6 +11,7 @@ const listaSchema = moongose.Schema(
         nombre: String,
       },
     ],
+    votos: Number,
   },
   {
     timestamps: true,

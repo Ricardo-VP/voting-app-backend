@@ -1,3 +1,4 @@
+const UserModel = require("../users/model/User");
 const ListaModel = require("./model/Lista");
 
 const obtenerListas = async (req, res) => {
@@ -26,14 +27,14 @@ const crearLista = async (req, res) => {
     .then(() => {
       return res.send({
         type: "success",
-        message: "Libro creado satisfactoriamente",
+        message: "Lista creada satisfactoriamente",
       });
     })
     .catch((err) => {
       console.log(err);
       return res.send({
         type: "error",
-        message: "Error al crear el libro",
+        message: "Error al crear la lista",
       });
     });
 };
@@ -85,9 +86,46 @@ const eliminarLista = async (req, res) => {
     });
 };
 
+const registrarVoto = async (req, res) => {
+  const { listaId } = req.params;
+  const { userId } = req.body;
+
+  await UserModel.findById(userId)
+    .then(async (user) => {
+      if (user.votoRegistrado) {
+        return res.send({
+          type: "error",
+          message: "El voto ya fué registrado",
+        });
+      } else {
+        await ListaModel.findByIdAndUpdate(listaId, { $inc: { votos: 1 } })
+          .then(() => {
+            return res.send({
+              type: "success",
+              message: "Voto realizado satisfactoriamente",
+            });
+          })
+          .catch((err) => {
+            return res.send({
+              type: "error",
+              message: "No se pudo registrar el voto",
+            });
+          });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.send({
+        type: "error",
+        message: "El usuario con el que intenta votar no fué encontrado",
+      });
+    });
+};
+
 module.exports = {
   obtenerListas,
   crearLista,
   actualizarLista,
   eliminarLista,
+  registrarVoto,
 };
