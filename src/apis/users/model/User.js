@@ -7,14 +7,11 @@ const userSchema = moongose.Schema(
       type: String,
       requireq: true,
     },
-    email: {
-      type: String,
-      requireq: true,
-    },
     password: {
       type: String,
       requireq: true,
     },
+    esAdmin: Boolean,
   },
   {
     timestamps: true,

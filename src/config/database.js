@@ -1,6 +1,7 @@
+require("dotenv").config();
 const moongose = require("mongoose");
 
-const url = "mongodb://localhost:27017/listas";
+const url = `${process.env.MONGO_URI}`;
 
 moongose
   .connect(url, {

@@ -2,16 +2,16 @@ const generateJWTtoken = require("../../utils");
 const UserModel = require("./model/User");
 
 const login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { cedula, password } = req.body;
 
-  const user = await UserModel.findOne({ email });
+  const user = await UserModel.findOne({ cedula });
   if (user && (await user.matchPassword(password))) {
     return res.send({
       type: "success",
       user: {
         _id: user._id,
         cedula: user.cedula,
-        email: user.email,
+        admin: user.esAdmin,
         token: generateJWTtoken(user),
       },
     });
@@ -24,11 +24,10 @@ const login = async (req, res, next) => {
 };
 
 const register = async (req, res, next) => {
-  const { cedula, email, password } = req.body;
+  const { cedula, password, esAdmin } = req.body;
 
-  const userExists = await UserModel.findOne({ email });
+  const userExists = await UserModel.findOne({ cedula });
   if (userExists) {
-    console.log(userExists);
     return res.status(400).send({
       type: "error",
       message: "El usuario ya existe",
@@ -37,14 +36,14 @@ const register = async (req, res, next) => {
 
   const user = await UserModel.create({
     cedula,
-    email,
     password,
+    esAdmin,
   });
   if (user) {
     return res.status(201).json({
       _id: user._id,
       cedula: user.cedula,
-      email: user.email,
+      admin: user.esAdmin,
       token: generateJWTtoken(user),
     });
   } else {
