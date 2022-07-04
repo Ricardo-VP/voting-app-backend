@@ -13,6 +13,7 @@ const login = async (req, res, next) => {
         cedula: user.cedula,
         admin: user.esAdmin,
         token: generateJWTtoken(user),
+        votoRegistrado: user.votoRegistrado,
       },
     });
   } else {
@@ -24,7 +25,7 @@ const login = async (req, res, next) => {
 };
 
 const register = async (req, res, next) => {
-  const { cedula, password, esAdmin } = req.body;
+  const { cedula, password, esAdmin, votoRegistrado } = req.body;
 
   const userExists = await UserModel.findOne({ cedula });
   if (userExists) {
@@ -38,12 +39,14 @@ const register = async (req, res, next) => {
     cedula,
     password,
     esAdmin,
+    votoRegistrado,
   });
   if (user) {
     return res.status(201).json({
       _id: user._id,
       cedula: user.cedula,
       admin: user.esAdmin,
+      votoRegistrado: user.votoRegistrado,
       token: generateJWTtoken(user),
     });
   } else {

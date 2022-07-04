@@ -20,6 +20,21 @@ const obtenerListas = async (req, res) => {
     });
 };
 
+const obtenerLista = async (req, res) => {
+  const { listaId } = req.params;
+
+  await ListaModel.findById(listaId)
+    .then((lista) => {
+      return res.send({
+        type: "success",
+        lista,
+      });
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+};
+
 const crearLista = async (req, res) => {
   const lista = new ListaModel(req.body);
 
@@ -99,11 +114,20 @@ const registrarVoto = async (req, res) => {
         });
       } else {
         await ListaModel.findByIdAndUpdate(listaId, { $inc: { votos: 1 } })
-          .then(() => {
-            return res.send({
-              type: "success",
-              message: "Voto realizado satisfactoriamente",
-            });
+          .then(async () => {
+            await UserModel.findByIdAndUpdate(userId, { votoRegistrado: true })
+              .then(() => {
+                return res.send({
+                  type: "success",
+                  message: "Voto realizado satisfactoriamente",
+                });
+              })
+              .catch((err) => {
+                return res.send({
+                  type: "error",
+                  message: "No se pudo registrar el voto",
+                });
+              });
           })
           .catch((err) => {
             return res.send({
@@ -124,6 +148,7 @@ const registrarVoto = async (req, res) => {
 
 module.exports = {
   obtenerListas,
+  obtenerLista,
   crearLista,
   actualizarLista,
   eliminarLista,

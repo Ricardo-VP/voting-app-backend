@@ -5,11 +5,13 @@ const {
   actualizarLista,
   eliminarLista,
   registrarVoto,
+  obtenerLista,
 } = require("./controller");
 
 const listasRouter = Router();
 
 listasRouter.get("/", obtenerListas);
+listasRouter.get("/:listaId", obtenerLista);
 listasRouter.post("/", crearLista);
 listasRouter.put("/:listaId", actualizarLista);
 listasRouter.delete("/:listaId", eliminarLista);
