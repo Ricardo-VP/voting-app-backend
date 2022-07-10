@@ -92,14 +92,38 @@ const borrarTodos = async (req, res) => {
     });
 };
 
+const borrarPorId = async (req, res) => {
+  const { userId } = req.params;
+
+  await UserModel.findByIdAndDelete(userId)
+    .then((deletedUser) => {
+      if (deletedUser === null) {
+        return res.send({
+          type: "error",
+          message: "No se encontró el usuario",
+        });
+      }
+      return res.send({
+        type: "success",
+        message: "Usuario eliminado con éxito",
+      });
+    })
+    .catch((err) => {
+      return res.send({
+        type: "error",
+        message: "No se pudo eliminar el usuario",
+      });
+    });
+};
+
 const obtenerTodos = async (req, res) => {
   await UserModel.find()
     .then((users) => {
-      if(users.length === 0){
+      if (users.length === 0) {
         return res.send({
-          type: 'success',
-          message: 'No hay usuarios registrados'
-        })
+          type: "success",
+          message: "No hay usuarios registrados",
+        });
       }
       return res.send({
         type: "success",
@@ -120,4 +144,5 @@ module.exports = {
   verificarVoto,
   borrarTodos,
   obtenerTodos,
+  borrarPorId,
 };
