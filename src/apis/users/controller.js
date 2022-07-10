@@ -76,8 +76,48 @@ const verificarVoto = async (req, res) => {
     });
 };
 
+const borrarTodos = async (req, res) => {
+  await UserModel.deleteMany({})
+    .then(() => {
+      return res.send({
+        type: "success",
+        message: "Se han eliminado todos los usuarios",
+      });
+    })
+    .catch((err) => {
+      return res.send({
+        type: "error",
+        message: "No se pudo eliminar los usuarios",
+      });
+    });
+};
+
+const obtenerTodos = async (req, res) => {
+  await UserModel.find()
+    .then((users) => {
+      if(users.length === 0){
+        return res.send({
+          type: 'success',
+          message: 'No hay usuarios registrados'
+        })
+      }
+      return res.send({
+        type: "success",
+        users,
+      });
+    })
+    .catch((err) => {
+      return res.send({
+        type: "success",
+        message: "No se pudo obtener los usuarios",
+      });
+    });
+};
+
 module.exports = {
   login,
   register,
   verificarVoto,
+  borrarTodos,
+  obtenerTodos,
 };

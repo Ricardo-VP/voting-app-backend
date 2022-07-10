@@ -1,7 +1,16 @@
 const { Router } = require("express");
-const { login, register, verificarVoto } = require("./controller");
+const {
+  login,
+  register,
+  verificarVoto,
+  obtenerTodos,
+  borrarTodos,
+} = require("./controller");
 
 const usersRouter = Router();
+
+usersRouter.get("/obtener-todos", obtenerTodos);
+usersRouter.delete("/eliminar-todos", borrarTodos);
 
 usersRouter.post("/login", login);
 usersRouter.post("/register", register);
