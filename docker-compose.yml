@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  mongo:
+    container_name: app-votacion
+    image: mongo
+    ports:
+      - 27017:27017
+    logging:
+      driver: none
+    volumes:
+      - mongodb:/data/db
+
+volumes:
+  mongodb:
